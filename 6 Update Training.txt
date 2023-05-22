@@ -1,0 +1,25 @@
+CREATE PROCEDURE UpdateTraining(
+  INOUT tema VARCHAR(255),
+  INOUT nama VARCHAR(255),
+  INOUT id_training BIGINT,
+  OUT eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  BEGIN
+    UPDATE Training SET
+      tema = tema,
+      nama_pengajar = nama
+    WHERE id = id_training;
+    
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+END;
+$$;

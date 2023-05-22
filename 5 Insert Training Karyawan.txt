@@ -1,0 +1,24 @@
+CREATE PROCEDURE SaveTrainingKaryawan(
+  INOUT id_karyawan BIGINT,
+  INOUT id_training BIGINT,
+  INOUT tanggal_training DATE,
+  INOUT id BIGINT,
+  OUT eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  BEGIN
+    INSERT INTO "Karyawan Training" (id_karyawan, id_training, tanggal_training)
+    VALUES (id_karyawan, id_training, tanggal_training);
+    
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+END;
+$$;

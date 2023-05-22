@@ -1,0 +1,26 @@
+CREATE PROCEDURE updateRekening (
+  INOUT p_id_karyawan BIGINT,
+  INOUT p_nama VARCHAR(255),
+  INOUT p_jenis VARCHAR(255),
+  INOUT p_nomor VARCHAR(255),
+  INOUT p_id BIGINT,
+  OUT p_error_desc VARCHAR(255),
+  OUT p_error_code INT
+)
+BEGIN
+  DECLARE EXIT HANDLER FOR SQLEXCEPTION
+  BEGIN
+    SET p_error_desc = 'Error occurred while updating Rekening record';
+    SET p_error_code = -1;
+  END;
+
+  UPDATE Rekening
+  SET nama = p_nama,
+      jenis = p_jenis,
+      nomor = p_nomor,
+      id_karyawan = p_id_karyawan
+  WHERE id = p_id;
+
+  SET p_error_desc = 'Rekening record updated successfully';
+  SET p_error_code = 0;
+END;

@@ -1,0 +1,36 @@
+CREATE PROCEDURE SaveKaryawan (
+INOUT nama VARCHAR(255),
+INOUT jk VARCHAR(10),
+INOUT dob DATE,
+INOUT alamat TEXT,
+INOUT status VARCHAR(20),
+INOUT nik VARCHAR(20),
+INOUT npwp VARCHAR(20),
+INOUT id_karyawan INT,
+OUT error_desc VARCHAR(255),
+OUT error_code INT
+)
+BEGIN
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+BEGIN
+   SET error_desc = 'Error inserting data into Karyawan or Detail Karyawan';
+   SET error_code = -1;
+   ROLLBACK;
+END;
+
+START TRANSACTION;
+
+-- Insert data into Karyawan table
+INSERT INTO Karyawan (nama, jk, dob, alamat, status)
+VALUES (nama, jk, dob, alamat, status);
+SET id_karyawan = LAST_INSERT_ID();
+
+-- Insert data into Detail Karyawan table
+INSERT INTO Detail_Karyawan (id_karyawan, nik, npwp)
+VALUES (id_karyawan, nik, npwp);
+
+COMMIT;
+
+SET error_desc = 'Data successfully inserted into Karyawan and Detail Karyawan';
+SET error_code = 0;
+END;

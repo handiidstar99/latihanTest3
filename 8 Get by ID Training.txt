@@ -1,0 +1,28 @@
+CREATE PROCEDURE GetByIdTraining(
+  IN id BIGINT,
+  OUT tema VARCHAR(255),
+  OUT nama_pengajar VARCHAR(255),
+T eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  BEGIN
+    SELECT tema, nama_pengajar
+    INTO tema, nama_pengajar
+    FROM Training
+    WHERE id = GetByIdTraining.id;
+    
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      eror_desc := 'Training not found';
+      eror_code := -1;
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+END;
+$$

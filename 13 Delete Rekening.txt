@@ -1,0 +1,27 @@
+CREATE OR REPLACE PROCEDURE deleteRekening(
+  INOUT p_id BIGINT,
+OUT p_error_desc VARCHAR,
+  OUT p_error_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_deleted_date TIMESTAMP;
+BEGIN
+  UPDATE Rekening
+  SET deleted_date = CURRENT_TIMESTAMP
+  WHERE id = p_id;
+
+  IF FOUND THEN
+    p_error_code := 0;
+    p_error_desc := 'Rekening deleted successfully';
+  ELSE
+    p_error_code := 1;
+    p_error_desc := 'Rekening with id ' || p_id || ' not found';
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    p_error_code := SQLSTATE;
+    p_error_desc := SQLERRM;
+END;
+$$;

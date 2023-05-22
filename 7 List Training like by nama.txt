@@ -1,0 +1,37 @@
+CREATE PROCEDURE GetListTraining(
+  IN tema VARCHAR(255),
+  OUT eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  training_list CURSOR FOR
+    SELECT id, tema, nama_pengajar
+    FROM Training
+    WHERE tema LIKE '%' || tema || '%';
+BEGIN
+  BEGIN
+    OPEN training_list;
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+
+  IF eror_code = 0 THEN
+    FETCH training_list;
+    WHILE FOUND DO
+      -- Do something with the training record, e.g. print it
+      RAISE NOTICE 'Training %: tema=%, nama_pengajar=%',
+                   training_list.id,
+                   training_list.tema,
+                   training_list.nama_pengajar;
+      FETCH training_list;
+    END WHILE;
+    CLOSE training_list;
+  END IF;
+END;
+$$;

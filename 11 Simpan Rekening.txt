@@ -1,0 +1,25 @@
+CREATE PROCEDURE saveRekening(
+  INOUT id_karyawan BIGINT,
+  INOUT nama VARCHAR(255),
+  INOUT jenis VARCHAR(255),
+  INOUT nomor VARCHAR(255),
+  INOUT id BIGINT,
+  OUT eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+BEGIN
+INSERT INTO "Rekening" (id_karyawan, nama, jenis, nomor)
+    VALUES (id_karyawan, nama, jenis, nomor);
+
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+END;
+$$;

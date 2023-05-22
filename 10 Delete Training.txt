@@ -1,0 +1,21 @@
+CREATE PROCEDURE deleteTrainingKaryawan(
+  INOUT id BIGINT,
+  OUT eror_desc VARCHAR(255),
+  OUT eror_code INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  BEGIN
+    DELETE FROM "Karyawan Training"
+    WHERE id = id;
+
+    GET DIAGNOSTICS eror_code = 0;
+    eror_desc := 'Success';
+  EXCEPTION
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS eror_desc = MESSAGE_TEXT,
+                                   eror_code = SQLSTATE;
+  END;
+END;
+$$;

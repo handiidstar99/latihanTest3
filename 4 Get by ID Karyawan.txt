@@ -1,0 +1,21 @@
+CREATE FUNCTION getKaryawan(
+  IN id_karyawan BIGINT
+)
+RETURNS TABLE (
+  id BIGINT,
+  nama VARCHAR(255),
+  jk VARCHAR(10),
+  dob DATE,
+  status VARCHAR(20),
+  alamat TEXT,
+  nik VARCHAR(20),
+  npwp VARCHAR(20)
+)
+AS $$
+BEGIN
+  RETURN QUERY
+    SELECT id, nama, jk, dob, status, alamat, nik, npwp
+    FROM Karyawan
+    WHERE id = id_karyawan;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,21 @@
+CREATE FUNCTION getListKaryawan(
+  IN nama VARCHAR(255)
+)
+RETURNS TABLE (
+  id BIGINT,
+  nama VARCHAR(255),
+  jk VARCHAR(10),
+  dob DATE,
+  status VARCHAR(20),
+  alamat TEXT,
+nik VARCHAR(20),
+  npwp VARCHAR(20)
+)
+AS $$
+BEGIN
+  RETURN QUERY
+    SELECT id, nama, jk, dob, status, alamat, nik, npwp
+    FROM Karyawan
+    WHERE nama LIKE '%' || nama || '%';
+END;
+$$ LANGUAGE plpgsql;

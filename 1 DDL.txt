@@ -1,0 +1,40 @@
+CREATE TABLE Karyawan (
+id INT PRIMARY KEY,
+nama VARCHAR(255),
+jk VARCHAR(20),
+dob DATE,
+status VARCHAR(20),
+alamat VARCHAR(255)
+);
+
+CREATE TABLE Detail_Karyawan (
+  id_karyawan INT,
+  nik VARCHAR(20),
+  npwp VARCHAR(20),
+  PRIMARY KEY (id_karyawan),
+  FOREIGN KEY (id_karyawan) REFERENCES Karyawan(id)
+);
+
+CREATE TABLE Rekening (
+id INT PRIMARY KEY,
+id_karyawan INT,
+nama VARCHAR(255),
+jenis VARCHAR(20),
+nomor VARCHAR(255),
+FOREIGN KEY (id_karyawan) REFERENCES Karyawan(id)
+);
+
+CREATE TABLE Training (
+id INT PRIMARY KEY,
+tema VARCHAR(255),
+nama_pengajar VARCHAR(255)
+);
+
+CREATE TABLE Karyawan_Training (
+id INT PRIMARY KEY,
+id_karyawan INT,
+id_training INT,
+tanggal_training DATE,
+FOREIGN KEY (id_karyawan) REFERENCES Karyawan(id),
+FOREIGN KEY (id_training) REFERENCES Training(id)
+);
